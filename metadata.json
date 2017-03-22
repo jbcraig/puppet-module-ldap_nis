@@ -1,0 +1,15 @@
+{
+  "name": "jbcraig-ldap_nis",
+  "version": "0.1.0",
+  "author": "jbcraig",
+  "summary": "Manage NIS style entries in LDAP",
+  "license": "Apache-2.0",
+  "source": "https://github.com/jbcraig/puppet-module-ldap_nis.git",
+  "project_page": "https://github.com/jbcraig/puppet-module-ldap_nis",
+  "issues_url": "https://github.com/jbcraig/puppet-module-ldap_nis/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
