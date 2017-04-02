@@ -1,0 +1,111 @@
+---
+ldap_nis::domain::objectclass:
+  - 'top'
+  - 'domain'
+  - 'nisdomainobject'
+ldap_nis::host::objectclass:
+  - 'top'
+  - 'device'
+  - 'iphost'
+ldap_nis::user::objectclass:
+  - 'top'
+  - 'posixaccount'
+  - 'shadowaccount'
+  - 'inetorgperson'
+  - 'person'
+  - 'organizationalperson'
+ldap_nis::mailgroup::objectclass:
+  - 'top'
+  - 'mailgroup'
+ldap_nis::automountmap::objectclass:
+  - 'top'
+  - 'automountmap'
+ldap_nis::automountkey::objectclass:
+  - 'top'
+  - 'automount'
+ldap_nis::group::objectclass:
+  - 'top'
+  - 'posixgroup'
+ldap_nis::netgroup::objectclass:
+  - 'top'
+  - 'nisnetgroup'
+ldap_nis::networks::objectclass:
+  - 'top'
+  - 'ipnetwork'
+ldap_nis::profile::objectclass:
+  - 'top'
+  - 'duaconfigprofile'
+ldap_nis::domain::create_containers: true
+ldap_nis::domain::containers:
+  aliases:
+    title: "ou=aliases,%{base}"
+    attributes:
+      ou: 'aliases'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Mail aliases for %{base}"
+  application:
+    title: "ou=application,%{base}"
+    attributes:
+      ou: 'application'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Applications for %{base}"
+  group:
+    title: "ou=group,%{base}"
+    attributes:
+      ou: 'group'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Group for %{base}"
+  hosts:
+    title: "ou=hosts,%{base}"
+    attributes:
+      ou: 'hosts'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Hosts for %{base}"
+  netgroup:
+    title: "ou=netgroup,%{base}"
+    attributes:
+      ou: 'netgroup'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Netgroups for %{base}"
+  networks:
+    title: "ou=networks,%{base}"
+    attributes:
+      ou: 'networks'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "Networks for %{base}"
+  people:
+    title: "ou=people,%{base}"
+    attributes:
+      ou: 'people'
+      objectclass:
+        - top
+        - organizationalunit
+      description: "People for %{base}"
+  profile:
+    title: "ou=profile,%{base}"
+    attributes:
+      objectclass:
+        - top
+        - organizationalunit
+      ou: 'profile'
+      description: "DUA configuration profiles for %{base}"
+  services:
+    title: "ou=services,%{base}"
+    attributes:
+      objectclass:
+        - top
+        - organizationalunit
+      ou: 'services'
+      description: "Services for %{base}"

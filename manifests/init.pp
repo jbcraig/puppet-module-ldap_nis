@@ -43,6 +43,36 @@
 # Copyright 2017 Your name here, unless otherwise noted.
 #
 class ldap_nis {
-
-
+  # ldap_entity { 'ou=Test,dc=craigslanding,dc=net':
+  #   ensure     => present,
+  #   host       => 'my-tcentos7.gfs.com',
+  #   port       => 636,
+  #   ssl        => true,
+  #   verify     => false,
+  #   base       => 'dc=craigslanding,dc=net',
+  #   username   => 'cn=admin,dc=craigslanding,dc=net',
+  #   password   => 'plaintext',
+  #   attributes => {
+  #     'objectclass' => ['top', 'organizationalUnit'],
+  #     'ou'          => 'Test',
+  #     'description' => 'Test for dc=craigslanding,dc=net',
+  #   },
+  #   # mutable    => [ 'description' ],
+  # }
+  # ldap_entity { 'ou=Test2,dc=craigslanding,dc=net':
+  #   ensure     => absent,
+  #   host       => 'my-tcentos7.gfs.com',
+  #   port       => 636,
+  #   ssl        => true,
+  #   verify     => false,
+  #   base       => 'dc=craigslanding,dc=net',
+  #   username   => 'cn=admin,dc=craigslanding,dc=net',
+  #   password   => 'plaintext',
+  #   attributes => {
+  #     'objectclass' => ['top', 'organizationalUnit'],
+  #     'ou'          => 'Test2',
+  #     'description' => 'Test2 for dc=craigslanding,dc=net',
+  #   },
+  #   # mutable    => [ 'description' ],
+  # }
 }
