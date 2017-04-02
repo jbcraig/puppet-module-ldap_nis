@@ -10,7 +10,10 @@ Puppet::Type.type(:ldap_entity).provide(:ldap) do
   def attributes=(value)
     value.each do |k, v|
       if @property_hash[:attributes].has_key?(k)
-        # next if [@property_hash[:attributes][:k]].flatten.sort == [value[:k]].flatten.sort
+        # skip if current value matches new
+        next if [@property_hash[:attributes][k]].flatten.sort == [v].flatten.sort
+
+        # skip if attribute is marked as mutable
         next if [resource[:mutable]].flatten.include? k
         ldap_replace_attribute([resource[:host], resource[:port], resource[:username], resource[:password],
                     [resource[:name], k, v]])
