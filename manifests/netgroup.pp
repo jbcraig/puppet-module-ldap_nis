@@ -1,13 +1,9 @@
 # ldap_nis::netgroup
-# olcObjectClasses: (
-#   1.3.6.1.1.1.2.8
-#   NAME 'nisNetgroup'
-#   DESC 'Abstraction of a netgroup. May refer to other netgroups'
-#   SUP top
-#   STRUCTURAL
+# objectclass ( 1.3.6.1.1.1.2.8 NAME 'nisNetgroup'
+#   DESC 'Abstraction of a netgroup'
+#   SUP top STRUCTURAL
 #   MUST cn
-#   MAY ( nisNetgroupTriple $ memberNisNetgroup $ description )
-# )
+#   MAY ( nisNetgroupTriple $ memberNisNetgroup $ description ) )
 define ldap_nis::netgroup (
   # required
   ## cn = name/title
@@ -32,7 +28,7 @@ define ldap_nis::netgroup (
 
   $required_attributes = {
     objectclass => $objectclass,
-    cn => $name,
+    cn          => $name,
   }
 
   # seprate entries into triples and included groups

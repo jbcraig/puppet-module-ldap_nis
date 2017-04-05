@@ -1,22 +1,21 @@
 # ldap_nis::network
-# olcObjectClasses: (
-#   1.3.6.1.1.1.2.7
-#   NAME 'ipNetwork'
-#   DESC 'Abstraction of a network. The distinguished value of the cn attribute denotes the networks canonical name'
-#   SUP top
-#   STRUCTURAL
-#   MUST ipNetworkNumber
-#   MAY ( cn $ ipNetmaskNumber $ l $ description $ manager )
-#   )
+##
+# from: openldap nis.schema
+# objectclass ( 1.3.6.1.1.1.2.7 NAME 'ipNetwork'
+#   DESC 'Abstraction of an IP network'
+#   SUP top STRUCTURAL
+#   MUST ( cn $ ipNetworkNumber )
+#   MAY ( ipNetmaskNumber $ l $ description $ manager ) )
 define ldap_nis::network (
   # required
   ## $ipnetworknumber = name/title
+  $label,
 
   $ensure      = present,
   $objectclass = lookup('ldap_nis::networks::objectclass'),
 
   # optional
-  $label         = undef,
+  $ipnetmask     = undef,
   $description   = undef,
   $mutable       = [],
 
@@ -33,6 +32,14 @@ define ldap_nis::network (
   $required_attributes = {
     objectclass     => $objectclass,
     ipnetworknumber => $name,
+    cn              => $label,
+  }
+
+  if $ipnetmask {
+    $_ipnetmask = { 'ipnetmasknumber' => $ipnetmask }
+  }
+  else {
+    $_ipnetmask = {}
   }
 
   if $description {
@@ -42,14 +49,8 @@ define ldap_nis::network (
     $_description = {}
   }
 
-  if $label {
-    $_label = { 'cn' => $label }
-  }
-  else {
-    $_label = {}
-  }
 
-  $attributes = $required_attributes + $_description + $_label
+  $attributes = $required_attributes + $_ipnetmask + $_description
 
   ldap_entity { "ipnetworknumber=${name},ou=networks,${base}":
     ensure     => $ensure,

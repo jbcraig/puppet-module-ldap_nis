@@ -1,12 +1,9 @@
 # ldap_nis::server::nis_domain - creates a nis style automountMap
-# olcObjectClasses: (
-#   1.3.6.1.1.1.2.15
+# objectclass ( 1.3.6.1.1.1.2.15
 #   NAME 'nisDomainObject'
+#   SUP top AUXILIARY
 #   DESC 'Associates a NIS domain with a naming context'
-#   SUP top
-#   AUXILIARY
-#   MUST nisDomain
-#   )
+#   MUST nisDomain )
 
 #
 # Title == @nisDomain String [nisDomainObect] name of the NIS domain
@@ -17,6 +14,7 @@
 define ldap_nis::domain (
   $ensure            = present,
   $dc                = $name,
+  $mutable           = [],
   $base              = lookup('ldap_nis::server::base'),
   $host              = lookup('ldap_nis::server::host'),
   $username          = lookup('ldap_nis::server::username'),
@@ -39,6 +37,7 @@ define ldap_nis::domain (
     port       => $port,
     ssl        => $ssl,
     verify     => $verify,
+    mutable    => $mutable,
     attributes => {
       objectclass => $objectclass,
       dc          => $dc,
@@ -46,7 +45,7 @@ define ldap_nis::domain (
     },
   }
 
-  if lookup('ldap_nis::domain::create_containers', Boolean) {
+  if $create_containers {
     $containers = lookup('ldap_nis::domain::containers', Hash)
 
     $ldap_defaults = {

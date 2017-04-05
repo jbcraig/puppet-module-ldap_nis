@@ -1,20 +1,14 @@
 # ldap_nis::mailgroup - creates a nis style mail aliases
-# ( 2.16.840.1.113730.3.2.4
+# objectclass ( 2.16.840.1.113730.3.2.4
 #   NAME 'mailGroup'
-#   SUP top
-#   STRUCTURAL
+#   SUP top STRUCTURAL
 #   MUST mail
-#   MAY ( cn $ mailAlternateAddress $ mailHost $ mailRequireAuth $
-#    mgrpAddHeader $ mgrpAllowedBroadcaster $ mgrpAllowedDomain $
-#    mgrpApprovePassword $ mgrpBroadcasterModeration $ mgrpDeliverTo $
-#    mgrpErrorsTo $ mgrpModerator $ mgrpMsgMaxSize $
-#    mgrpMsgRejectAction $ mgrpMsgRejectText $ mgrpNoMatchAddrs $
-#    mgrpRemoveHeader $ mgrpRFC822MailMember )
-# )
+#   MAY ( cn $ mgrpRFC822MailMember ) )
 define ldap_nis::mailgroup (
   # $name = groupname,
-  $members,
+  $members     = undef,
   $ensure      = present,
+  $mutable     = [],
   $objectclass = lookup('ldap_nis::mailgroup::objectclass', Array),
   $base        = lookup('ldap_nis::server::base'),
   $host        = lookup('ldap_nis::server::host'),
@@ -25,6 +19,20 @@ define ldap_nis::mailgroup (
   $verify      = lookup('ldap_nis::server::base'),
 ) {
 
+  $required_attributes = {
+    objectclass          => $objectclass,
+    mail                 => $name,
+  }
+
+  if $_members {
+    $_members = { 'mgrprfc822mailmember' => $members }
+  }
+  else {
+    $_members = {}
+  }
+
+  $attributes = $required_attributes + $_members
+
   ldap_entity { "mail=${name},ou=aliases,${base}":
     ensure     => $ensure,
     base       => $base,
@@ -34,11 +42,8 @@ define ldap_nis::mailgroup (
     port       => $port,
     ssl        => $ssl,
     verify     => $verify,
-    attributes => {
-      objectclass          => $objectclass,
-      mail                 => $name,
-      mgrprfc822mailmember => $members,
-    },
+    mutable    => $mutable,
+    attributes => $attributes,
   }
 
 }

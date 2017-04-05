@@ -1,12 +1,17 @@
 # ldap_nis::user - creates a nis style user account
-# olcObjectClasses: (
-#   1.3.6.1.1.1.2.15
-#   NAME 'nisDomainObject'
-#   DESC 'Associates a NIS domain with a naming context'
-#   SUP top
-#   AUXILIARY
-#   MUST nisDomain
-#   )
+# objectclass ( 1.3.6.1.1.1.2.0 NAME 'posixAccount'
+#   DESC 'Abstraction of an account with POSIX attributes'
+#   SUP top AUXILIARY
+#   MUST ( cn $ uid $ uidNumber $ gidNumber $ homeDirectory )
+#   MAY ( userPassword $ loginShell $ gecos $ description ) )
+#
+# objectclass ( 1.3.6.1.1.1.2.1 NAME 'shadowAccount'
+#   DESC 'Additional attributes for shadow passwords'
+#   SUP top AUXILIARY
+#   MUST uid
+#   MAY ( userPassword $ shadowLastChange $ shadowMin $
+#         shadowMax $ shadowWarning $ shadowInactive $
+#         shadowExpire $ shadowFlag $ description ) )
 define ldap_nis::user (
   # required attributes
   $uidnumber,

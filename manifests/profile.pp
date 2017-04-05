@@ -1,15 +1,14 @@
 # ldap_nis::profile
-# objectclass ( 1.3.6.1.4.1.11.1.3.1.2.3 NAME 'DUAConfigProfile'
-#   SUP top STRUCTURAL
+# objectclass ( 1.3.6.1.4.1.11.1.3.1.2.4
+#   NAME 'DUAConfigProfile'
 #   DESC 'Abstraction of a base configuration for a DUA'
-#   MUST ( cn )
-#   MAY ( defaultServerList $ preferredServerList $
-#         defaultSearchBase $ defaultSearchScope $
-#         searchTimeLimit $ bindTimeLimit $
-#         credentialLevel $ authenticationMethod $
-#         followReferrals $ serviceSearchDescriptor $
-#         objectclassMap $ attributeMap $
-#         profileTTL ) )
+#   STRUCTURAL
+#   MUST cn
+#   MAY ( defaultServerList $ preferredServerList $ defaultSearchBase $
+#     defaultSearchScope $ searchTimeLimit $ bindTimeLimit $ credentialLevel $
+#     authenticationMethod $ followReferrals $ serviceSearchDescriptor $
+#     serviceCredentialLevel $ serviceAuthenticationMethod $ objectclassMap $
+#     attributeMap $ profileTTL ) )
 define ldap_nis::profile (
   # required attributes
   # cn = name/title

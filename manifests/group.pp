@@ -1,15 +1,14 @@
 # ldap_nis::group
-# olcObjectClasses: (
-#   1.3.6.1.1.1.2.2
-#   NAME 'posixGroup'
+##
+# from: openldap nis.schema
+# objectclass ( 1.3.6.1.1.1.2.2 NAME 'posixGroup'
 #   DESC 'Abstraction of a group of accounts'
-#   SUP top
-#   AUXILIARY
-#   MUST gidNumber
-#   MAY ( userPassword $ memberUid $ description )
-#   )
+#   SUP top STRUCTURAL
+#   MUST ( cn $ gidNumber )
+#   MAY ( userPassword $ memberUid $ description ) )
 define ldap_nis::group (
   # required
+  ## cn = name/title
   $gidnumber,
 
   $ensure = present,
@@ -58,9 +57,7 @@ define ldap_nis::group (
     $_description = {}
   }
 
-  $attributes = $required_attributes +
-        $_gr_password +
-        $_members +
+  $attributes = $required_attributes + $_gr_password + $_members +
         $_description
 
   ldap_entity { "cn=${name},ou=group,${base}":
