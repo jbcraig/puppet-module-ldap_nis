@@ -157,11 +157,11 @@ DN format: `"cn=${name}+ipHostNumber=${iphostnumber},ou=hosts,${base}"`
       iphostnumber => '1.1.1.1',
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`name`| | The name should be the fully qualified domain name.  This is the primary name for the host and is what is returned for reverse ip lookups. Defaults to the titlebar value if not specified|
-| `iphostnumber` | | IP address of host |
-| aliases | [] | An array of hostname aliases|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | The name should be the fully qualified domain name.  This is the primary name for the host and is what is returned for reverse ip lookups. Defaults to the titlebar value if not specified   |
+|  `iphostnumber` |         | IP address of host            |
+|  aliases        | []      | An array of hostname aliases |
 
 #### ldap_nis::user
 DN format: `"uid=${name},ou=${container},${base}"`
@@ -174,20 +174,18 @@ DN format: `"uid=${name},ou=${container},${base}"`
       homedirectory => '/home/myuser',
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`uid`|`name`/`title`| Username for entry|
-|`uidnumber`||UserID number|
-|`gidnumber`||GroupID number|
-|`sn`||Surname of the user|
-|`homedirectory`||Users home directory|
-|uid|`name`|UID attribute|
-|cn|`name`|CN attribute
-|loginshell|undef|Path to the loginshell|
-|container|people|OU container for account.  Allows placing users into different containers.  By default a **people** and **application** container are provided.
-|employeenumber|undef|Employee number of the user|
-|userpassword|undef|Password for the user|
-|gecos|undef|GECOS information for the user|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Username for entry           |
+| `uidnumber`     |         | UserID number                |
+| `gidnumber`     |         | GroupID number               |
+| `sn`            |         | Surname of the user          |
+| `homedirectory` |         | Users home directory         |
+| loginshell      | undef   | Path to the loginshell       |
+| container       | people  | OU container for account.  Allows placing users into different containers.  By default **people** and **application** containers are provided. |
+| employeenumber  | undef    | Employee number of the user |
+| userpassword    | undef    | Password for the user       |
+| gecos           | undef    | GECOS information for the user |
 
 #### ldap_nis::group
 DN format: `"cn=${name},ou=group,${base}"`
@@ -196,13 +194,13 @@ DN format: `"cn=${name},ou=group,${base}"`
       gidnumber => 1000,
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`name`|`title`|Group Name|
-|`gidnumber`||GroupID number|
-|gr_password|undef|Group Password|
-|members|undef|Array of member UIDs|
-|description|undef|Description of group|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Group Name                   |
+| `gidnumber`     |         | GroupID number               |
+| gr_password     | undef   | Group Password               |
+| members         | undef   | Array of member UIDs         |
+| description     | undef   | Description of group         |
 
 #### ldap_nis::netgroup
 DN format: `"cn=${name},ou=netgroup,${base}`
@@ -211,10 +209,10 @@ DN format: `"cn=${name},ou=netgroup,${base}`
       ensure => present,
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`cn`|`name`/`title`|Name of netgroup|
-|members|[]|Array of netgroup members which may include individual netgroup triples or the names of other netgroups|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Name of netgroup             |
+| members         | []      | Array of netgroup members which may include individual netgroup triples or the names of other netgroups |
 
 #### ldap_nis::automountmap
 
@@ -224,10 +222,10 @@ DN format: `"automountmapname=${name},${base}"`
       ensure => present,
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`automountmapname`|`name`/`title`|Name of Automount Map|
-|description|undef|Description for Automount Map|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Name of Automount Map        |
+| description     | undef   | Description for Automount Map |
 
 #### ldap_nis::automountentry
 DN format: `"automountkey=${name},automountmapname=${mapname},${base}"`
@@ -237,12 +235,12 @@ DN format: `"automountkey=${name},automountmapname=${mapname},${base}"`
       info    => '-rw,bg,retry=2,soft,vers=3 myappserver:/myapps',
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`automountkey`|`name`/`title`|Automount entry mountpoint directory|
-|`mapname`||Name of map for this entry|
-|`info`||Mount information for entry|
-|description|undef|Description for this entry|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Automount entry mountpoint directory|
+| `mapname`       |         | Name of map for this entry   |
+| `info`          |         | Mount information for entry  |
+| description     | undef   | Description for this entry   |
 
 #### ldap_nis::mailgroup
 DN format: `"mail=${name},ou=aliases,${base}""`
@@ -252,10 +250,10 @@ DN format: `"mail=${name},ou=aliases,${base}""`
       members => [ 'user1', 'user2' ],
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`name`||Mail group name|
-|`members`||Array of mailgroup member addresses|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          |         | Mail group name              |
+| `members`       |         | Array of mailgroup member addresses |
 
 #### ldap_nis::network
 DN format: `"ipnetworknumber=${name},ou=networks,${base}"`
@@ -265,12 +263,12 @@ DN format: `"ipnetworknumber=${name},ou=networks,${base}"`
       description => 'The Big Red 1',
     }
 
-|Parameter|Default|Description|
-|---|---|---|---|
-|`name`|`title`|Network portion of address space|
-|`label`||Short name for network|
-|ipnetmask|undef|Netmask for network (CIDR Addressing)|
-|description|undef|Description of network|
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | Network portion of address space |
+| `label`         |         | Short name for network       |
+| ipnetmask       | undef   | Netmask for network (CIDR Addressing) |
+| description     | undef   | Description of network       |
 
 ## Functions
 
@@ -302,8 +300,8 @@ This module began life as an extension to the datacentred/ldap module and morphe
 
 ### Running tests
 
-TODO - need to work on tests
-This project contains tests for both [rspec-puppet](http://rspec-puppet.com/) and [beaker-rspec](https://github.com/puppetlabs/beaker-rspec) to verify functionality. For in-depth information please see their respective documentation.
+<!--- TODO - need to work on tests --->
+This project contains tests uses [rspec-puppet](http://rspec-puppet.com/) to verify functionality. Test coverage is minimal at best at this point, but should improve with time.
 
 Quickstart:
 
