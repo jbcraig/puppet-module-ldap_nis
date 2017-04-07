@@ -21,10 +21,13 @@ define ldap_nis::domain (
   $password          = lookup('ldap_nis::server::password'),
   $port              = lookup('ldap_nis::server::port'),
   $ssl               = lookup('ldap_nis::server::ssl'),
-  $verify            = lookup('ldap_nis::server::base'),
+  $verify            = lookup('ldap_nis::server::verify'),
+  $ssl_cacert        = lookup('ldap_nis::server::ssl_cacert'),
   $objectclass       = lookup('ldap_nis::domain::objectclass', Array),
   $create_containers = lookup('ldap_nis::domain::create_containers', Boolean),
 ) {
+
+  echo { "ssl_cacert = ${ssl_cacert}": }
 
   $rootdn      = domain2dn($name)
 
@@ -37,6 +40,7 @@ define ldap_nis::domain (
     port       => $port,
     ssl        => $ssl,
     verify     => $verify,
+    ssl_cacert => $ssl_cacert,
     mutable    => $mutable,
     attributes => {
       objectclass => $objectclass,
@@ -49,14 +53,15 @@ define ldap_nis::domain (
     $containers = lookup('ldap_nis::domain::containers', Hash)
 
     $ldap_defaults = {
-      ensure   => $ensure,
-      base     => $base,
-      host     => $host,
-      username => $username,
-      password => $password,
-      port     => $port,
-      ssl      => $ssl,
-      verify   => $verify,
+      ensure     => $ensure,
+      base       => $base,
+      host       => $host,
+      username   => $username,
+      password   => $password,
+      port       => $port,
+      ssl        => $ssl,
+      verify     => $verify,
+      ssl_cacert => $ssl_cacert,
     }
 
     # echo {"base = ${base}": }

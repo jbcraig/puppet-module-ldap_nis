@@ -34,13 +34,14 @@ define ldap_nis::profile (
   $profilettl                  = undef,
 
   # ldap connectivity
-  $base     = lookup('ldap_nis::server::base',     String),
-  $host     = lookup('ldap_nis::server::host',     String),
-  $username = lookup('ldap_nis::server::username', String),
-  $password = lookup('ldap_nis::server::password', String),
-  $port     = lookup('ldap_nis::server::port',     Data),
-  $ssl      = lookup('ldap_nis::server::ssl',      Boolean),
-  $verify   = lookup('ldap_nis::server::verify',   Boolean),
+  $base     = lookup('ldap_nis::server::base',         String),
+  $host     = lookup('ldap_nis::server::host',         String),
+  $username = lookup('ldap_nis::server::username',     String),
+  $password = lookup('ldap_nis::server::password',     String),
+  $port     = lookup('ldap_nis::server::port',         Data),
+  $ssl      = lookup('ldap_nis::server::ssl',          Boolean),
+  $ssl_cacert = lookup('ldap_nis::server::ssl_cacert', String),
+  $verify   = lookup('ldap_nis::server::verify',       Boolean),
 ) {
 
   $required_attributes = {
@@ -159,6 +160,7 @@ define ldap_nis::profile (
     password   => $password,
     port       => $port,
     ssl        => $ssl,
+    ssl_cacert => $ssl_cacert,
     verify     => $verify,
     mutable    => $mutable,
     attributes => $attributes,

@@ -85,6 +85,11 @@ Puppet::Type.type(:ldap_entity).provide(:ldap) do
 
   def ldap(args)
     host, port, admin_user, admin_password, _ = args
+
+    tls_options={}
+    tls_options[:ca_file] = resource[:ssl_cacert] unless resource[:ssl_cacert].empty?
+    tls_options[:verify_mode] = OpenSSL::SSL::VERIFY_NONE unless resource[:verify]
+
     ldap = Net::LDAP.new(
       { :host => host,
         :port => port,
@@ -92,10 +97,9 @@ Puppet::Type.type(:ldap_entity).provide(:ldap) do
           :method => :simple,
           :username => admin_user,
           :password => admin_password}}.
-          merge(resource[:ssl] ? {:encryption => {:method => :simple_tls}.
-            merge(resource[:verify] ?
-              {:tls_options =>  OpenSSL::SSL::SSLContext::DEFAULT_PARAMS} :
-              {:tls_options => {:verify_mode => OpenSSL::SSL::VERIFY_NONE}} )} : {}))
+          merge(resource[:ssl] ? {:encryption => {
+            :method => :simple_tls,
+            :tls_options => tls_options}} : {}))
     Puppet.debug("Connecting to LDAP server ldaps://#{host}:#{port}")
     ldap.bind
     ldap

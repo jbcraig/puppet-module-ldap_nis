@@ -1,4 +1,9 @@
 ---
+# Default to using SSL and rely on host trusted CA store
+ldap_nis::server::ssl:        true
+ldap_nis::server::ssl_cacert: ''
+ldap_nis::server::verify:     true
+
 ldap_nis::domain::objectclass:
   - 'top'
   - 'domain'
@@ -35,6 +40,8 @@ ldap_nis::networks::objectclass:
 ldap_nis::profile::objectclass:
   - 'top'
   - 'duaconfigprofile'
+
+# Define the default NIS containers
 ldap_nis::domain::create_containers: true
 ldap_nis::domain::containers:
   aliases:

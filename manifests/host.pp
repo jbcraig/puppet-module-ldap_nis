@@ -18,6 +18,7 @@ define ldap_nis::host (
   $password    = lookup('ldap_nis::server::password'),
   $port        = lookup('ldap_nis::server::port'),
   $ssl         = lookup('ldap_nis::server::ssl'),
+  $ssl_cacert  = lookup('ldap_nis::server::ssl_cacert'),
   $verify      = lookup('ldap_nis::server::verify'),
 ) {
 
@@ -43,6 +44,7 @@ define ldap_nis::host (
     password   => $password,
     port       => $port,
     ssl        => $ssl,
+    ssl_cacert => $ssl_cacert,
     verify     => $verify,
     mutable    => $mutable,
     attributes => $attributes,

@@ -104,6 +104,11 @@ Puppet::Type.newtype(:ldap_entity) do
     defaultto true
   end
 
+  newparam(:ssl_cacert) do
+    desc 'Path to a CA file used to verify SSL certificates'
+    defaultto String.new('')
+  end
+
   # Add autorequire
   autorequire(:ldap_entry) do
     # Strip off the first dn to autorequire the parent

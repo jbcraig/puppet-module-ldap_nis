@@ -16,7 +16,7 @@ define ldap_nis::mailgroup (
   $password    = lookup('ldap_nis::server::password'),
   $port        = lookup('ldap_nis::server::port'),
   $ssl         = lookup('ldap_nis::server::ssl'),
-  $verify      = lookup('ldap_nis::server::base'),
+  $verify      = lookup('ldap_nis::server::verify'),
 ) {
 
   $required_attributes = {
@@ -24,7 +24,7 @@ define ldap_nis::mailgroup (
     mail                 => $name,
   }
 
-  if $_members {
+  if $members {
     $_members = { 'mgrprfc822mailmember' => $members }
   }
   else {

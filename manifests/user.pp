@@ -32,13 +32,14 @@ define ldap_nis::user (
 
   $mutable        = undef,
 
-  $base     = lookup('ldap_nis::server::base'),
-  $host     = lookup('ldap_nis::server::host'),
-  $username = lookup('ldap_nis::server::username'),
-  $password = lookup('ldap_nis::server::password'),
-  $port     = lookup('ldap_nis::server::port'),
-  $ssl      = lookup('ldap_nis::server::ssl'),
-  $verify   = lookup('ldap_nis::server::verify'),
+  $base       = lookup('ldap_nis::server::base'),
+  $host       = lookup('ldap_nis::server::host'),
+  $username   = lookup('ldap_nis::server::username'),
+  $password   = lookup('ldap_nis::server::password'),
+  $port       = lookup('ldap_nis::server::port'),
+  $ssl        = lookup('ldap_nis::server::ssl'),
+  $ssl_cacert = lookup('ldap_nis::server::ssl_cacert'),
+  $verify     = lookup('ldap_nis::server::verify'),
 ) {
 
   $required_attributes = {

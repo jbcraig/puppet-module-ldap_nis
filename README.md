@@ -52,6 +52,7 @@ While you may provide credentials for each resource definition it is easier to s
     ldap_nis::server::password: 'plaintext'
     ldap_nis::server::port:     636
     ldap_nis::server::ssl:      true
+    ldap_nis::server::ssl_cacert: '/etc/ssl/certs/myca-bundle.crt'
     ldap_nis::server::verify:   true
 
 
@@ -61,9 +62,10 @@ While you may provide credentials for each resource definition it is easier to s
 * `password` - associated password
 * `port` - either the unencrypted port (389) or the ldaps:/// encrypted port (636) when using SSL
 * `ssl` - whether or not to use ldaps:/// SSL encryption
+* `ssl_cacert` - Path to a PEM file with your trusted CAs.
 * `verify` - whether or not to verify the ssl certificate and/or server DNS entry
 
-If you choose to use `ssl` then your certificates need to pass standard OpenSSL verification (known CA, certificate host and DNS host record match).  In the case of self signed certificates or wild-card certificates this verification may fail.  In that instance, setting `verify` to false will allow their use.  Please note that this is generally considered a security risk and should not be done for publicly accessible LDAP servers.  Using `ssl` requires the use of ldaps:/// and the ldap instance should be configured to provide an ldaps:/// encrypted port.
+The `ssl` option only supports the ldaps:// interface on an ecrypted port (usually 636).  When using SSL you may choose to disable certificate validation by setting `verify` to false.  This disables all verification and opens up the possibility for man-in-the-middle attacks.  By default, the puppet net-ldap gem uses a private CA bundle to authenticate certificates.  This makes it impossible to simply add your certificate to the OS trust store.  The `ssl_cacert` allows you to specify your own list CA trusted certificates.
 
 ### Beginning with ldap_nis
 
