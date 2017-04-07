@@ -20,6 +20,7 @@
     * [ldap_nis::automountentry](#ldap_nis::automountentry) - automount map mountpoint entry
     * [ldap_nis::mailgroup](#ldap_nis::mailgroup) - mail group aliases
     * [ldap_nis::network](#ldap_nis::network) - network entry
+    * [ldap_nis::service](#ldap_nis::service) - ip services
   * [Functions](#Functions)
     * [domain2dn](#domain2dn)
     * [sha1digest](#sha1digest)
@@ -91,7 +92,7 @@ It may be desirable to allow certain attributes to change after creation.  Attri
 
 ### Types
 * [ldap_entity](#ldap_entity) - a native type for creating arbitrary ldap entries
-* [ldap_nis::domain](#ldap_nis::domain) - domain object
+* [ldap_nis::domain](#ldap_nis-domain) - domain object
 * [ldap_nis::host](#ldap_nis::host) - host entry
 * [ldap_nis::user](#ldap_nis::user) - user entry
 * [ldap_nis::group](#ldap_nis::group) - group entry
@@ -100,6 +101,7 @@ It may be desirable to allow certain attributes to change after creation.  Attri
 * [ldap_nis::automountentry](#ldap_nis::automountentry) - automount map mountpoint entry
 * [ldap_nis::mailgroup](#ldap_nis::mailgroup) - mail group aliases
 * [ldap_nis::network](#ldap_nis::network) - network entry
+* [ldap_nis::service](#ldap_nis::service) - ip services
 
 #### ldap_entity
 Allows creation of raw ldap entries.  Here is an example of manually creating a domain entry for yourdomain.net:
@@ -271,6 +273,21 @@ DN format: `"ipnetworknumber=${name},ou=networks,${base}"`
 | `label`         |         | Short name for network       |
 | ipnetmask       | undef   | Netmask for network (CIDR Addressing) |
 | description     | undef   | Description of network       |
+
+#### ldap_nis::service
+DN format: `"cn=${name}+ipserviceprotocol=${ipserviceprotocol},ou=services,${base}`
+
+    ldap_nis { 'mytcpport':
+      ipservicerport    => '1000',
+      ipserviceprotocol => 'tcp',
+    }
+
+| Parameter       | Default | Description                  |
+| :-------------- | :-----: | :--------------------------- |
+| `name`          | `title` | IP Port Name                 |
+| `ipserviceport` |         | IP Port Number               |
+| `ipserviceprotocol` |     | IP Protocol                  |
+| description     | undef   | Description of IP Port       |
 
 ## Functions
 

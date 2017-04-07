@@ -40,6 +40,9 @@ ldap_nis::networks::objectclass:
 ldap_nis::profile::objectclass:
   - 'top'
   - 'duaconfigprofile'
+ldap_nis::service::objectclass:
+  - 'top'
+  - 'ipservice'
 
 # Define the default NIS containers
 ldap_nis::domain::create_containers: true
