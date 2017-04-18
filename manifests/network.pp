@@ -51,9 +51,10 @@ define ldap_nis::network (
   }
 
 
+  $dn         = "ipnetworknumber=${name},ou=networks,${base}"
   $attributes = $required_attributes + $_ipnetmask + $_description
 
-  ldap_entity { "ipnetworknumber=${name},ou=networks,${base}":
+  ldap_entity { $dn:
     ensure     => $ensure,
     base       => $base,
     host       => $host,
@@ -65,5 +66,12 @@ define ldap_nis::network (
     ssl_cacert => $ssl_cacert,
     mutable    => $mutable,
     attributes => $attributes,
+  }
+
+  # Order resource create/destruction properly
+  case $ensure {
+    'present': { Ldap_nis::Domain[$base]->Ldap_entity[$dn] }
+    'absent':  { Ldap_entity[$dn]->Ldap_nis::Domain[$base] }
+    default :  { fail("ensure must be present or absent, not ${ensure}") }
   }
 }

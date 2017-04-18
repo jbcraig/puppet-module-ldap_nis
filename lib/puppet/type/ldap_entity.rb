@@ -112,8 +112,7 @@ Puppet::Type.newtype(:ldap_entity) do
   # Add autorequire
   autorequire(:ldap_entry) do
     # Strip off the first dn to autorequire the parent
-    parent = self[:name].split(",").drop(1).join(",")
-    parent
+    self[:name].split(",").drop(1).join(",")
   end
 
 end

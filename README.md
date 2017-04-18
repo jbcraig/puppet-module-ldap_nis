@@ -10,20 +10,20 @@
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [References](#reference)
   * [Types](#Types)
-    * [ldap_entity](#ldap_entity) - a native type for creating arbitrary ldap entries
-    * [ldap_nis::domain](#ldap_nis::domain) - domain object
-    * [ldap_nis::host](#ldap_nis::host) - host entry
-    * [ldap_nis::user](#ldap_nis::user) - user entry
-    * [ldap_nis::group](#ldap_nis::group) - group entry
-    * [ldap_nis::netgroup](#ldap_nis::netgroup) - netgroup entry
-    * [ldap_nis::automountmap](#ldap_nis::automountmap) - automount map (auto_master, auto_direct, etc.)
-    * [ldap_nis::automountentry](#ldap_nis::automountentry) - automount map mountpoint entry
-    * [ldap_nis::mailgroup](#ldap_nis::mailgroup) - mail group aliases
-    * [ldap_nis::network](#ldap_nis::network) - network entry
-    * [ldap_nis::service](#ldap_nis::service) - ip services
+    - [ldap_entity](#ldap_entity) - a native type for creating arbitrary ldap entries
+    - [ldap_nis::domain](#ldap_nisdomain) - domain object
+    - [ldap_nis::host](#ldap_nishost) - host entry
+    - [ldap_nis::user](#ldap_nisuser) - user entry
+    - [ldap_nis::group](#ldap_nisgroup) - group entry
+    - [ldap_nis::netgroup](#ldap_nisnetgroup) - netgroup entry
+    - [ldap_nis::automountmap](#ldap_nisautomountmap) - automount map (auto_master, auto_direct, etc.)
+    - [ldap_nis::automountentry](#ldap_nis-automountentry) - automount map mountpoint entry
+    - [ldap_nis::mailgroup](#ldap_nismailgroup) - mail group aliases
+    - [ldap_nis::network](#ldap_nisnetwork) - network entry
+    - [ldap_nis::service](#ldap_nisservice) - ip services
   * [Functions](#Functions)
-    * [domain2dn](#domain2dn)
-    * [sha1digest](#sha1digest)
+    - [domain2dn](#domain2dn)
+    - [sha1digest](#sha1digest)
 1. [Limitations](#limitations)
 1. [Developmente](#development)
 
@@ -72,16 +72,16 @@ The `ssl` option only supports the ldaps:// interface on an ecrypted port (usual
 
 The first object to create is the NIS domain object.  The following example is for a generic domain used my "yourdomian.net" and assumes the credentials listed above.
 
-    $dns_name = 'yourdomain.net'
-    $base     = domain2dn($dns_name)
-    $domain   = 'yourdomain'
+    $dns_name         = 'yourdomain.net'
+    $base             = domain2dn($dns_name)
+    $nis_domainname   = 'yourdomain'
 
     ldap_nis::domain { $dns_name:
-      ensure => present,
-      dc     => $domain,
+      ensure         => present,
+      nis_domainname => $domain,
     }
 
-This will create the NIS domain object and by default will create supporting containers (ou=people, ou=group, etc.).  You may now create additional entries for users, groups, netgroups, etc.
+This will create the NIS domain object and by default will create supporting containers (ou=people, ou=group, etc.).  You may now create additional entries for users, groups, netgroups, etc.  Some resources depend upon the existence of others (ie automountmap/automountentry) and the defined types will autorequire parent entities to ensure resources are created and destroyed in the appropriate order.
 
 ## Usage
 ### Attribute Mutability
@@ -92,16 +92,16 @@ It may be desirable to allow certain attributes to change after creation.  Attri
 
 ### Types
 * [ldap_entity](#ldap_entity) - a native type for creating arbitrary ldap entries
-* [ldap_nis::domain](#ldap_nis-domain) - domain object
-* [ldap_nis::host](#ldap_nis::host) - host entry
-* [ldap_nis::user](#ldap_nis::user) - user entry
-* [ldap_nis::group](#ldap_nis::group) - group entry
-* [ldap_nis::netgroup](#ldap_nis::netgroup) - netgroup entry
-* [ldap_nis::automountmap](#ldap_nis::automountmap) - automount map (auto_master, auto_direct, etc.)
-* [ldap_nis::automountentry](#ldap_nis::automountentry) - automount map mountpoint entry
-* [ldap_nis::mailgroup](#ldap_nis::mailgroup) - mail group aliases
-* [ldap_nis::network](#ldap_nis::network) - network entry
-* [ldap_nis::service](#ldap_nis::service) - ip services
+* [ldap_nis::domain](#ldap_nisdomain) - domain object
+* [ldap_nis::host](#ldap_nishost) - host entry
+* [ldap_nis::user](#ldap_nisuser) - user entry
+* [ldap_nis::group](#ldap_nisgroup) - group entry
+* [ldap_nis::netgroup](#ldap_nisnetgroup) - netgroup entry
+* [ldap_nis::automountmap](#ldap_nisautomountmap) - automount map (auto_master, auto_direct, etc.)
+* [ldap_nis::automountentry](#ldap_nisautomountentry) - automount map mountpoint entry
+* [ldap_nis::mailgroup](#ldap_nismailgroup) - mail group aliases
+* [ldap_nis::network](#ldap_nisnetwork) - network entry
+* [ldap_nis::service](#ldap_nisservice) - ip services
 
 #### ldap_entity
 Allows creation of raw ldap entries.  Here is an example of manually creating a domain entry for yourdomain.net:
@@ -144,9 +144,9 @@ DN format: `"${base}"`
 
 Here is the entry to create the domain using the provided defined type:
 
-    ldap_nis::domain { 'yourdomain.net':
-      ensure => present,
-      dc     => 'yourdomain',
+    ldap_nis::domain { domain2dn('yourdomain.net'):
+      ensure         => present,
+      nis_domainname => 'yourdomain',
     }
 
 The provider creates the containers by default unless you specify:
@@ -166,6 +166,8 @@ DN format: `"cn=${name}+ipHostNumber=${iphostnumber},ou=hosts,${base}"`
 | `name`          | `title` | The name should be the fully qualified domain name.  This is the primary name for the host and is what is returned for reverse ip lookups. Defaults to the titlebar value if not specified   |
 |  `iphostnumber` |         | IP address of host            |
 |  aliases        | []      | An array of hostname aliases |
+
+Care must be taken when changing parameters that make up the DN for the entry as they will result in a new entry being created rather than updating the old entry.  When you must change one of these values you will need to add a resource to delete the old entry.  This is true of any of the resource types within this module.
 
 #### ldap_nis::user
 DN format: `"uid=${name},ou=${container},${base}"`

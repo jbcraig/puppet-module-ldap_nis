@@ -145,6 +145,7 @@ define ldap_nis::profile (
     $_profilettl = {}
   }
 
+  $dn         = "cn=${name},ou=profile,${base}"
   $attributes = $required_attributes + $_defaultserverlist +
         $_preferredserverlist + $_defaultsearchbase + $_defaultsearchscope +
         $_searchtimelimit + $_bindtimelimit + $_credentiallevel +
@@ -152,7 +153,7 @@ define ldap_nis::profile (
         $_servicesearchdescriptor + $_serviceauthenticationmethod +
         $_objectclassmap + $_attributemap + $_profilettl
 
-  ldap_entity { "cn=${name},ou=profile,${base}":
+  ldap_entity { $dn:
     ensure     => $ensure,
     base       => $base,
     host       => $host,
@@ -164,5 +165,12 @@ define ldap_nis::profile (
     verify     => $verify,
     mutable    => $mutable,
     attributes => $attributes,
+  }
+
+  # Order resource create/destruction properly
+  case $ensure {
+    'present': { Ldap_nis::Domain[$base]->Ldap_entity[$dn] }
+    'absent':  { Ldap_entity[$dn]->Ldap_nis::Domain[$base] }
+    default :  { fail("ensure must be present or absent, not ${ensure}") }
   }
 }

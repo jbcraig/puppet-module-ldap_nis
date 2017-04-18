@@ -36,9 +36,10 @@ define ldap_nis::automountentry (
     $_description = {}
   }
 
+  $dn         = "automountkey=${name},automountmapname=${mapname},${base}"
   $attributes = $required_attributes + $_description
 
-  ldap_entity { "automountkey=${name},automountmapname=${mapname},${base}":
+  ldap_entity { $dn:
     ensure     => $ensure,
     base       => $base,
     host       => $host,
@@ -50,7 +51,13 @@ define ldap_nis::automountentry (
     verify     => $verify,
     mutable    => $mutable,
     attributes => $attributes,
-    require    => Ldap_nis::Automountmap[$mapname],
+  }
+
+  # Order resource create/destruction properly
+  case $ensure {
+    'present': { Ldap_nis::Automountmap[$mapname]->Ldap_entity[$dn] }
+    'absent':  { Ldap_entity[$dn]->Ldap_nis::Automountmap[$mapname] }
+    default :  { fail("ensure must be present or absent, not ${ensure}") }
   }
 
 }

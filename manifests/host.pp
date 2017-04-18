@@ -34,9 +34,10 @@ define ldap_nis::host (
     $_aliases = { 'cn' => [$name] }
   }
 
+  $dn         = "cn=${name}+ipHostNumber=${iphostnumber},ou=hosts,${base}"
   $attributes = $required_attributes + $_aliases
 
-  ldap_entity { "cn=${name}+ipHostNumber=${iphostnumber},ou=hosts,${base}":
+  ldap_entity { $dn:
     ensure     => $ensure,
     base       => $base,
     host       => $host,
@@ -48,6 +49,13 @@ define ldap_nis::host (
     verify     => $verify,
     mutable    => $mutable,
     attributes => $attributes,
+  }
+
+  # Order resource create/destruction properly
+  case $ensure {
+    'present': { Ldap_nis::Domain[$base]->Ldap_entity[$dn] }
+    'absent':  { Ldap_entity[$dn]->Ldap_nis::Domain[$base] }
+    default :  { fail("ensure must be present or absent, not ${ensure}") }
   }
 
 }

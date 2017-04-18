@@ -12,8 +12,8 @@
 # @create_containers Boolean wether or not to create supporting containers (ie People, Hosts, ...)
 
 define ldap_nis::domain (
+  $nis_domainname,
   $ensure            = present,
-  $dc                = $name,
   $mutable           = [],
   $base              = lookup('ldap_nis::server::base'),
   $host              = lookup('ldap_nis::server::host'),
@@ -27,11 +27,11 @@ define ldap_nis::domain (
   $create_containers = lookup('ldap_nis::domain::create_containers', Boolean),
 ) {
 
-  echo { "ssl_cacert = ${ssl_cacert}": }
+  if $name != $base {
+    fail("name and base must match")
+  }
 
-  $rootdn      = domain2dn($name)
-
-  ldap_entity { $rootdn:
+  ldap_entity { $name:
     ensure     => $ensure,
     base       => $base,
     host       => $host,
@@ -44,7 +44,7 @@ define ldap_nis::domain (
     mutable    => $mutable,
     attributes => {
       objectclass => $objectclass,
-      dc          => $dc,
+      dc          => $nis_domainname,
       nisdomain   => $name,
     },
   }
@@ -62,13 +62,16 @@ define ldap_nis::domain (
       ssl        => $ssl,
       verify     => $verify,
       ssl_cacert => $ssl_cacert,
+      before     => $ensure ? {
+        'present' => undef,
+        'absent'  => Ldap_entity[$name],
+      },
     }
 
-    # echo {"base = ${base}": }
-    # echo {"container = ${lookup('ldap_nis::domain::container::auto_direct')}":}
     $containers.each |String $container, Hash $definition| {
-      echo { "Creating container: ${container}, ${definition[title]}: ${definition[attribute]}":}
-      create_resources('ldap_entity', { $definition[title] => { attributes => $definition[attributes] }}, $ldap_defaults)
+      create_resources('ldap_entity', {
+        $definition[title] => {
+          attributes => $definition[attributes] }}, $ldap_defaults)
     }
   }
 
